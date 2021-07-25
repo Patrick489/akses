@@ -12,14 +12,6 @@ echo -e " SSH                : SSH Service Is "$green"Running"$NC""
 else                                                                                    
 echo -e " SSh                : SSH Service Is "$red"Not Running (Error)"$NC""        
 fi
-status="$(systemctl show stunnel4.service --no-page)"                                   
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
-if [ "${status_text}" == "active" ]                                                     
-then                                                                                    
-echo -e " Stunnel            : Stunnel Service Is "$green"Running"$NC""                  
-else                                                                                    
-echo -e " Stunnel            : Stunnel Service Is "$red"Not Running (Error)"$NC""        
-fi                                                                                
 status="$(systemctl show dropbear.service --no-page)"                                   
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
@@ -27,7 +19,71 @@ then
 echo -e " DropBear           : DropBear Service Is "$green"Running"$NC""                  
 else                                                                                    
 echo -e " DropBear           : DropBear Service Is "$red"Not Running (Error)"$NC""        
-fi                                                                                      
+fi
+status="$(systemctl show stunnel4.service --no-page)"                                   
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Stunnel            : Stunnel Service Is "$green"Running"$NC""                  
+else                                                                                    
+echo -e " Stunnel            : Stunnel Service Is "$red"Not Running (Error)"$NC""        
+fi 
+status="$(systemctl show openvpn.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Openvpn            : Openvpn Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " Openvpn            : Openvpn Service Is "$red"Not Running (Error)"$NC""      
+fi 
+status="$(systemctl show ssh-ws.service --no-page)"
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)
+if [ "${status_text}" == "active" ]
+then
+echo -e " Ssh Websocket      : Ssh Websocket Service Is "$green"Running"$NC""
+else 
+echo -e " Ssh Websocket      : Ssh Websocket Service Is "$red"Not Running (Error)"$NC""
+fi
+status="$(systemctl show ovpn-ws.service --no-page)" 
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)
+if [ "${status_text}" == "active" ] 
+then 
+echo -e " Ovpn Websocket     : Ovpn Websocket Service Is "$green"Running"$NC"" 
+else 
+echo -e " Ovpn Websocket     : Ovpn Websocket Service Is "$red"Not Running (Error)"$NC""
+fi
+status="$(systemctl show squid.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Squid              : Squid Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " Squid              : Squid Service Is "$red"not Running (Error)"$NC""      
+fi
+status="$(systemctl show nginx.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Nginx              : Nginx Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " Nginx              : Nginx Service Is "$red"Not Running (Error)"$NC""      
+fi 
+status="$(systemctl show wg-quick@wg0 --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Wireguard          : Wireguard Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " Wireguard          : Wireguard Service Is "$red"Not Running (Error)"$NC""      
+fi 
+status="$(systemctl show v2ray.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " V2ray TLS          : V2ray TLS Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " V2ray TLS          : V2ray TLS Service Is "$red"Not Running (Error)"$NC""      
+fi                                                                                                                                                                  
 status="$(systemctl show v2ray@none.service --no-page)"                                 
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
@@ -36,14 +92,6 @@ echo -e " V2ray Non TLS      : V2ray Non TLS Service Is "$green"Running"$NC""
 else                                                                                    
 echo -e " V2ray Non TLS      : V2ray Non TLS Service Is "$red"Not Running (Error)"$NC""    
 fi                                                                                      
-status="$(systemctl show v2ray.service --no-page)"                                      
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
-if [ "${status_text}" == "active" ]                                                     
-then                                                                                    
-echo -e " V2ray TLS          : V2ray TLS Service Is "$green"Running"$NC""                
-else                                                                                    
-echo -e " V2ray TLS          : V2ray TLS Service Is "$red"Not Running (Error)"$NC""      
-fi
 status="$(systemctl show v2ray@vless.service --no-page)"                                      
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
@@ -68,37 +116,13 @@ echo -e " Trojan             : Trojan Service Is "$green"Running"$NC""
 else                                                                                    
 echo -e " Trojan             : Trojan Service Is "$red"Not Running (Error)"$NC""      
 fi
-status="$(systemctl show squid.service --no-page)"                                      
+status="$(systemctl show shadowsocks-libev.service --no-page)"                                      
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
 then                                                                                    
-echo -e " Squid              : Squid Service Is "$green"Running"$NC""                
+echo -e " Shadowsocks        : Shadowsocks Service Is "$green"Running"$NC""                
 else                                                                                    
-echo -e " Squid              : Squid Service Is "$red"not Running (Error)"$NC""      
-fi
-status="$(systemctl show openvpn.service --no-page)"                                      
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
-if [ "${status_text}" == "active" ]                                                     
-then                                                                                    
-echo -e " Openvpn            : Openvpn Service Is "$green"Running"$NC""                
-else                                                                                    
-echo -e " Openvpn            : Openvpn Service Is "$red"Not Running (Error)"$NC""      
-fi
-status="$(systemctl show wg-quick@wg0 --no-page)"                                      
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
-if [ "${status_text}" == "active" ]                                                     
-then                                                                                    
-echo -e " Wireguard          : Wireguard Service Is "$green"Running"$NC""                
-else                                                                                    
-echo -e " Wireguard          : Wireguard Service Is "$red"Not Running (Error)"$NC""      
-fi
-status="$(systemctl show accel-ppp.service --no-page)"                                      
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
-if [ "${status_text}" == "active" ]                                                     
-then                                                                                    
-echo -e " SSTP               : SSTP Service Is "$green"Running"$NC""                
-else                                                                                    
-echo -e " SSTP               : SSTP Service Is "$red"Not Running (Error)"$NC""      
+echo -e " Shadowsocks        : Sadhowsocks Service Is "$red"Not Running (Error)"$NC""      
 fi
 status="$(systemctl show ssrmu --no-page)"                                      
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
@@ -108,21 +132,13 @@ echo -e " ShadowsocksR       : SSR Service Is "$green"Running"$NC""
 else                                                                                    
 echo -e " ShadowsocksR       : SSR Service Is "$red"Not Running (Error)"$NC""      
 fi
-status="$(systemctl show shadowsocks-libev.service --no-page)"                                      
+status="$(systemctl show accel-ppp.service --no-page)"                                      
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
 then                                                                                    
-echo -e " Shadowsocks        : Shadowsocks Service Is "$green"Running"$NC""                
+echo -e " SSTP               : SSTP Service Is "$green"Running"$NC""                
 else                                                                                    
-echo -e " Shadowsocks        : Sadhowsocks Service Is "$red"Not Running (Error)"$NC""      
-fi
-status="$(systemctl show xl2tpd.service --no-page)"                                      
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
-if [ "${status_text}" == "active" ]                                                     
-then                                                                                    
-echo -e " L2tp               : L2tp Service Is "$green"Running"$NC""                
-else                                                                                    
-echo -e " L2tp               : L2tp Service Is "$red"Not Running (Error)"$NC""      
+echo -e " SSTP               : SSTP Service Is "$red"Not Running (Error)"$NC""      
 fi
 status="$(systemctl show pptpd.service --no-page)"                                      
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
@@ -132,29 +148,13 @@ echo -e " PPTP               : PPTP Service Is "$green"Running"$NC""
 else                                                                                    
 echo -e " PPTP               : PPTP Service Is "$red"Not Running (Error)"$NC""      
 fi
-status="$(systemctl show nginx.service --no-page)"                                      
+status="$(systemctl show xl2tpd.service --no-page)"                                      
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
 then                                                                                    
-echo -e " Nginx              : Nginx Service Is "$green"Running"$NC""                
+echo -e " L2TP               : L2TP Service Is "$green"Running"$NC""                
 else                                                                                    
-echo -e " Nginx              : Nginx Service Is "$red"Not Running (Error)"$NC""      
-fi
-status="$(systemctl show ssh-ws.service --no-page)"
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)
-if [ "${status_text}" == "active" ]
-then
-echo -e " Ssh Websocket      : Ssh Websocket Service Is "$green"Running"$NC""
-else 
-echo -e " Ssh Websocket      : Ssh Websocket Service Is "$red"Not Running (Error)"$NC""
-fi
-status="$(systemctl show ovpn-ws.service --no-page)" 
-status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)
-if [ "${status_text}" == "active" ] 
-then 
-echo -e " Ovpn Websocket     : Ovpn Websocket Service Is "$green"Running"$NC"" 
-else 
-echo -e " Ovpn Websocket     : Ovpn Websocket Service Is "$red"Not Running (Error)"$NC""
+echo -e " L2TP               : L2TP Service Is "$red"Not Running (Error)"$NC""      
 fi
 echo -e " ----------------------------------------------------------"                                                                                        
 echo -e "============================================================"
