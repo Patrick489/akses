@@ -156,5 +156,21 @@ echo -e " L2TP               : L2TP Service Is "$green"Running"$NC""
 else                                                                                    
 echo -e " L2TP               : L2TP Service Is "$red"Not Running (Error)"$NC""      
 fi
+status="$(systemctl show cron.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Cron                : Cron Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " Cron                : Cron Service Is "$red"Not Running (Error)"$NC""      
+fi
+status="$(systemctl show fail2ban.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e " Fail2Ban               : Fail2Ban Service Is "$green"Running"$NC""                
+else                                                                                    
+echo -e " Fail2Ban               : Fail2Ban Service Is "$red"Not Running (Error)"$NC""      
+fi
 echo -e " ----------------------------------------------------------"                                                                                        
 echo -e "============================================================"
