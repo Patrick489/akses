@@ -5,8 +5,14 @@ latest_version="$(wget --no-check-certificate -qO- https://api.github.com/repos/
 echo "${latest_version}"
 trojango_link="https://github.com/p4gefau1t/trojan-go/releases/download/${latest_version}/trojan-go-linux-amd64.zip"
 
+# Uuid Service
+uuid=$(cat /proc/sys/kernel/random/uuid)
+# Domain
+domain=$(cat /etc/v2ray/domain)
+
 mkdir -p "/usr/bin/trojan-go"
 mkdir -p "/etc/trojan-go"
+touch /etc/trojan-go/akun.conf
 
 cd `mktemp -d`
 wget -nv "${trojango_link}" -O trojan-go.zip
@@ -15,7 +21,6 @@ unzip -q trojan-go.zip && rm -rf trojan-go.zip
 mv trojan-go /usr/bin/trojan-go/trojan-go && chmod +x /usr/bin/trojan-go/trojan-go
 mv geoip.dat /etc/trojan-go/geoip.dat
 mv geosite.dat /etc/trojan-go/geosite.dat
-mv example/trojan-go.service /etc/systemd/system/trojan-go.service
 
 # if config.json didn't exist, use the example server.json 
 cat> /etc/trojan-go/config.json << END
@@ -24,7 +29,7 @@ cat> /etc/trojan-go/config.json << END
   "local_addr": "0.0.0.0",
   "local_port": 2096,
   "remote_addr": "127.0.0.1",
-  "remote_port": 19999,
+  "remote_port": 81,
   "log_level": 1,
   "log_file": "",
   "password": [
@@ -49,7 +54,7 @@ cat> /etc/trojan-go/config.json << END
     "reuse_session": true,
     "plain_http_response": "",
     "fallback_addr": "127.0.0.1",
-    "fallback_port": 19999,
+    "fallback_port": 2096,
     "fingerprint": "firefox"
   },
   "tcp": {
@@ -75,7 +80,7 @@ cat> /etc/trojan-go/config.json << END
   "websocket": {
     "enabled": true,
     "path": "/Trojan-Go",
-    "host": ""
+    "host": "$domain"
   },
   "shadowsocks": {
     "enabled": false,
@@ -121,6 +126,36 @@ cat> /etc/trojan-go/config.json << END
 }
 END
 
+cat <<EOF > /etc/systemd/system/trojan-go.service
+[Unit]
+Description=Trojan-Go
+Documentation=https://p4gefau1t.github.io/trojan-go/
+After=network.target nss-lookup.target
+
+[Service]
+User=root
+NoNewPrivileges=true
+ExecStart=/etc/trojan-go/trojan-go -config /etc/trojan-go/config.json
+Restart=on-failure
+RestartSec=10s
+LimitNOFILE=infinity
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+
+cat <<EOF > /etc/trojan/uuid.txt
+$uuid
+EOF
+iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 2096 -j ACCEPT
+iptables -I INPUT -m state --state NEW -m udp -p udp --dport 2096 -j ACCEPT
+iptables-save > /etc/iptables.up.rules
+iptables-restore -t < /etc/iptables.up.rules
+netfilter-persistent save
+netfilter-persistent reload
+
+aystemctl daemon-reload
 systemctl enable trojan-go
 systemctl restart trojan-go
 
