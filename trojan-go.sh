@@ -15,11 +15,15 @@ mkdir -p /etc/trojan-go/
 touch /etc/trojan-go/akun.conf
 touch /etc/trojan-go/uuid.txt
 
+# Install Trojan-Go
+chmod 777 /etc/trojan-go/
+touch /etc/trojan-go/trojan-go.pid
+
 cd `mktemp -d`
 wget -nv "${trojango_link}" -O trojan-go.zip
 unzip -q trojan-go.zip && rm -rf trojan-go.zip
 
-mv trojan-go /usr/bin/trojan-go/trojan-go && chmod +x /usr/bin/trojan-go/trojan-go
+mv trojan-go /etc/trojan-go/trojan-go && chmod +x /etc/trojan-go/trojan-go
 mv geoip.dat /etc/trojan-go/geoip.dat
 mv geosite.dat /etc/trojan-go/geosite.dat
 
