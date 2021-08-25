@@ -69,7 +69,7 @@ cat <<EOF > /etc/trojan-go/config.json
   },
   "websocket": {
     "enabled": true,
-    "path": "/bokir_tampan",
+    "path": "/MailStores",
     "host": "$domain"
   }
 }
@@ -77,7 +77,7 @@ EOF
 
 cat <<EOF > /etc/systemd/system/trojan-go.service
 [Unit]
-Description=Trojan-Go
+Description=Trojan-Go  
 Documentation=https://p4gefau1t.github.io/trojan-go/
 After=network.target nss-lookup.target
 
@@ -91,21 +91,20 @@ LimitNOFILE=infinity
 
 [Install]
 WantedBy=multi-user.target
-
 EOF
 
-cat <<EOF > /etc/trojan/uuid.txt
+cat <<EOF > /etc/trojan-go/uuid.txt
 $uuid
 EOF
 iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 2096 -j ACCEPT
 iptables -I INPUT -m state --state NEW -m udp -p udp --dport 2096 -j ACCEPT
-iptables-save > /etc/iptables.up.rules
-iptables-restore -t < /etc/iptables.up.rules
+iptables-save >/etc/iptables.rules.v4
 netfilter-persistent save
 netfilter-persistent reload
+systemctl daemon-reload
 
-aystemctl daemon-reload
-systemctl enable trojan-go
-systemctl restart trojan-go
-
+# Starting
+systemctl daemon-reload
+systemctl enable trojan-go.service
+systemctl start trojan-go
 echo "trojan-go is installed."
