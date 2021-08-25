@@ -28,16 +28,16 @@ mv geoip.dat /etc/trojan-go/geoip.dat
 mv geosite.dat /etc/trojan-go/geosite.dat
 
 # if config.json didn't exist, use the example server.json 
-cat> /etc/trojan-go/config.json << END
+cat <<EOF > /etc/trojan-go/config.json
 {
-  "run_type": "server",
-  "local_addr": "0.0.0.0",
-  "local_port": 2096,
-  "remote_addr": "127.0.0.1",
-  "remote_port": 81,
-  "log_level": 1,
-  "log_file": "",
-  "password": [
+    "run_type": "server",
+    "local_addr": "0.0.0.0",
+    "local_port": 2096,
+    "remote_addr": "127.0.0.1",
+    "remote_port": 81,
+    "log_level": 1,
+    "log_file": "/var/log/trojan-go.log",
+    "password": [
         "$uuid"
     ],
   "disable_http_check": false,
@@ -45,13 +45,13 @@ cat> /etc/trojan-go/config.json << END
   "ssl": {
     "verify": true,
     "verify_hostname": true,
-    "cert": "/etc/v2ray/v2ray.cert",
+    "cert": "/etc/v2ray/v2ray.crt",
     "key": "/etc/v2ray/v2ray.key",
     "key_password": "",
-    "cipher": "",
+    "cipher": "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
     "curves": "",
-    "prefer_server_cipher": false,
-    "sni": "",
+    "prefer_server_cipher": true,
+    "sni": "$domain",
     "alpn": [
       "http/1.1"
     ],
@@ -60,76 +60,20 @@ cat> /etc/trojan-go/config.json << END
     "plain_http_response": "",
     "fallback_addr": "127.0.0.1",
     "fallback_port": 2096,
-    "fingerprint": "firefox"
+    "fingerprint": ""
   },
   "tcp": {
     "no_delay": true,
     "keep_alive": true,
     "prefer_ipv4": false
   },
-  "mux": {
-    "enabled": true,
-    "concurrency": 8,
-    "idle_timeout": 60
-  },
-  "router": {
-    "enabled": false,
-    "bypass": [],
-    "proxy": [],
-    "block": [],
-    "default_policy": "proxy",
-    "domain_strategy": "as_is",
-    "geoip": "/etc/trojan-go/geoip.dat",
-    "geosite": "/etc/trojan-go/geosite.dat"
-  },
   "websocket": {
     "enabled": true,
-    "path": "/Trojan-Go",
+    "path": "/bokir_tampan",
     "host": "$domain"
-  },
-  "shadowsocks": {
-    "enabled": false,
-    "method": "AES-128-GCM",
-    "password": ""
-  },
-  "transport_plugin": {
-    "enabled": false,
-    "type": "",
-    "command": "",
-    "option": "",
-    "arg": [],
-    "env": []
-  },
-  "forward_proxy": {
-    "enabled": false,
-    "proxy_addr": "",
-    "proxy_port": 0,
-    "username": "",
-    "password": ""
-  },
-  "mysql": {
-    "enabled": false,
-    "server_addr": "localhost",
-    "server_port": 3306,
-    "database": "",
-    "username": "",
-    "password": "",
-    "check_rate": 60
-  },
-  "api": {
-    "enabled": false,
-    "api_addr": "",
-    "api_port": 0,
-    "ssl": {
-      "enabled": false,
-      "key": "",
-      "cert": "",
-      "verify_client": false,
-      "client_cert": []
-    }
   }
 }
-END
+EOF
 
 cat <<EOF > /etc/systemd/system/trojan-go.service
 [Unit]
