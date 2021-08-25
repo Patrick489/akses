@@ -10,9 +10,10 @@ uuid=$(cat /proc/sys/kernel/random/uuid)
 # Domain
 domain=$(cat /etc/v2ray/domain)
 
-mkdir -p "/usr/bin/trojan-go"
-mkdir -p "/etc/trojan-go"
+# Trojan Go Akun 
+mkdir -p /etc/trojan-go/
 touch /etc/trojan-go/akun.conf
+touch /etc/trojan-go/uuid.txt
 
 cd `mktemp -d`
 wget -nv "${trojango_link}" -O trojan-go.zip
